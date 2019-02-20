@@ -9,7 +9,7 @@ print("Opening and reading the first spreadsheet")
 # desired itemId's
 # InHere.xlsx is a spreadsheet that contains all items
 pathopen = "C:\\Users\\" + userName + "\\Desktop\\findThese.xlsx"
-pathfulllistopen = "C:\\Users\\" + userName + "\\Desktop\\InHere.xlsx"
+pathfulllistopen = "C:\\Users\\" + userName + "\\Desktop\\inHere.xlsx"
 
 # create 2 workbooks
 WorkBookRead = xlrd.open_workbook(pathopen)
@@ -72,7 +72,6 @@ for i in range(len(IdList)):
 
     if i == 200 or i == 350 or i == 500:
         print(".")
-# print(SameId)
 
 print("File comparison complete")
 # ----------------------------------------------------------------------------#
@@ -105,8 +104,10 @@ for i in range(len(SameId)):
 
         # if there is a match add all the cells from that row to the oneRow array
         # the rows in the all item spreadsheet are not of a fixed length
-        if NewIdListItem == OtherWorkSheetRead.cell(rows, 0).value:  # changed to zero maybe back to 1
-            for j in range(OtherWorkSheetRead.row_len(rows)):
+        # we also set the start value to the last row, this will make it so when we compare the next ItemId we don't
+        # need to start at the beginning of the full list since the ItemId's are in numerical order
+        if NewIdListItem == OtherWorkSheetRead.cell(rows, 0).value:
+            for j in range(start, OtherWorkSheetRead.row_len(rows)):
                 oneRow.append(OtherWorkSheetRead.cell(rows, j).value)
             start = rows
             found = True
@@ -117,7 +118,7 @@ for i in range(len(SameId)):
             for l in range(len(oneRow)):
                 row.write(l, oneRow[l])
             rowCount += 1
-            print("Writing row " + rowCount.__str__() + " to output.xls on your desktop")
+            print("Writing row " + rowCount.__str__() + " to output.xls")
 
     # Here we clear the oneRow array to create a "new" row
     oneRow.clear()
